@@ -32,15 +32,15 @@ function getColorHex() {
 
 // drawing the characters
 function draw() {
-    $("#color").css("background", getColorHex());
-    $('#color').html(getColorHex());
+    // $("#color").css("background", getColorHex());
+    // $('#color').html(getColorHex());
     
     // Get the BG color based on the current time i.e. rgb(hh, mm, ss)
     // translucent BG to show trail
-    ctx.fillStyle = getColor();
+    ctx.fillStyle = "rgba(0,0,0,0.05)"; //getColor();
     ctx.fillRect(0, 0, c.width, c.height);
     
-    ctx.fillStyle = "#BBB"; // grey text
+    ctx.fillStyle = "#0F0"; // green text
     ctx.font = font_size + "px arial";
     
     // looping over drops
