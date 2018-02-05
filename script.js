@@ -24,8 +24,47 @@ function ajusta_ctx () {
 	for (var x = 0; x < columns; x++) drops[x] = 1;
 }
 
+
+var _pedido = [
+	"Scheylla",
+	"aceita ser",
+	"minha",
+	"Player 2?",
+];
+
+var add_pedido = false;
+var _1o_draw = false;
+
+var pedido_iteracao = 0;
+var pedido_posicao = 0;
+
+var _pedido_escrito = [];
+
 // drawing the characters
 function draw() {
+
+	if (!_1o_draw) {
+		_1o_draw = true;
+		setTimeout(function () {
+			add_pedido = true;
+		}, 5000);
+	}
+
+	var text_pedido = "";
+	var _fill = [];
+	var pode_add = false;
+
+	if (add_pedido && pedido_iteracao < _pedido.length) {
+		text_pedido = _pedido[pedido_iteracao];
+		_fill = [
+			text_pedido[pedido_posicao],
+			(	( pedido_posicao == 0 )
+			?	( Math.floor(Math.random() * (columns - text_pedido.length)) )
+			:	( _pedido_escrito[_pedido_escrito.length - 1][1] / font_size + 1 )
+			) * font_size,
+			(pedido_iteracao + 1) * 3 * font_size
+		];
+	}
 
 	// translucent BG to show trail
 	ctx.fillStyle = "rgba(0,0,0,0.05)"; //getColor();
@@ -46,14 +85,35 @@ function draw() {
 		if (drops[i] * font_size > c.height && Math.random() > 0.975)
 			drops[i] = 0;
 
+		if (_fill.length && (i * font_size) == _fill[1] && (drops[i] * font_size) == _fill[2]) {
+			pode_add = true;
+		}
+
 		// Incrementing Y coordinate
 		drops[i]++;
 	}
+
+	if (add_pedido) {
+		ctx.fillStyle = "#FFF"; // text_pedido color
+
+		for (var i = 0; i < _pedido_escrito.length; i++) {
+			ctx.fillText(_pedido_escrito[i][0], _pedido_escrito[i][1], _pedido_escrito[i][2]);
+		}
+
+		if (pode_add && pedido_iteracao < _pedido.length) {
+			// x = i * font_size, y = value of drops[i] * font_size
+			ctx.fillText(_fill[0], _fill[1], _fill[2]);
+
+			_pedido_escrito.push(_fill);
+			pedido_posicao++;
+			if (pedido_posicao >= text_pedido.length) {
+				pedido_posicao = 0;
+				pedido_iteracao++;
+			}
+		}
+	}
 }
 
-
-
-// setInterval(draw, 33);
 var press_start = function () {};
 var press_start_title = function () {};
 var start_timeout = null;
@@ -104,7 +164,7 @@ function start_pressed(event) {
 		ctx.fillStyle = "rgba(0,0,0,1)"; //getColor();
 		ctx.fillRect(0, 0, c.width, c.height);
 
-		setInterval(draw, 50);
+		setInterval(draw, 33);
 		count_start = 2;
 	}
 }
