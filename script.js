@@ -176,6 +176,10 @@ $(document).ready(function () {
 	press_start();
 	$("body").keydown(start_pressed);
 
+	$(document).on('click touch', function (e) {
+		start_pressed({keyCode:13});
+	});
+
 	ajusta_ctx();
 	// $(window).resize(ajusta_ctx);
 });
